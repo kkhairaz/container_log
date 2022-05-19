@@ -1,0 +1,953 @@
+Wed May 18 11:08:49 2022
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/HAND/RStar-W-WStar.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV RStar-W-WStar
+{0:x5=x;}
+ P0               ;
+ ori x7,x0,1      ;
+ lr.w x6,0(x5)    ;
+ ori x9,x0,2      ;
+ sw x9,0(x5)      ;
+ sc.w x8,x7,0(x5) ;
+
+forall (0:x6=0 /\ (0:x8=0 /\ x=1 \/ not (0:x8=0) /\ x=2))
+Generated assembler
+#START _litmus_P0
+	ori t6,x0,1
+	lr.w a3,0(a5)
+	ori a1,x0,2
+	sw a1,0(a5)
+	sc.w a0,t6,0(a5)
+Test RStar-W-WStar Required
+Histogram (1 states)
+40000000:>0:x6=0; 0:x8=1; x=2;
+Ok
+
+Witnesses
+Positive: 40000000, Negative: 0
+Condition forall (0:x6=0 /\ (0:x8=0 /\ x=1 \/ not (0:x8=0) /\ x=2)) is validated
+Hash=9e406f2f8520b28edb9fc8fa6a39dd8d
+Observation RStar-W-WStar Always 40000000 0
+Time RStar-W-WStar 12.35
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/HAND/ISA12.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV ISA12
+{uint64_t x=0; 0:x10=x;}
+ P0                 ;
+ ori x6,x0,1        ;
+ ori x7,x0,2        ;
+ lr.d x5,0(x10)     ;
+ sd x6,0(x10)       ;
+ sc.d x28,x7,0(x10) ;
+
+locations [0:x28;]
+exists (x=2)
+Generated assembler
+#START _litmus_P0
+	ori t5,x0,1
+	ori t4,x0,2
+	lr.d t6,0(a5)
+	sd t5,0(a5)
+	sc.d a6,t4,0(a5)
+Test ISA12 Allowed
+Histogram (1 states)
+40000000:>0:x28=1; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (x=2) is NOT validated
+Hash=8fed07cd82e7d350f11afbafa8066f36
+Observation ISA12 Never 0 40000000
+Time ISA12 13.88
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/HAND/SC-FAIL.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV SC-FAIL
+{0:x2=x; 0:x3=y;}
+ P0               ;
+ ori x6,x0,1      ;
+ lr.w x7,0(x2)    ;
+ sc.w x8,x6,0(x3) ;
+
+forall (y=0 /\ 0:x8=1)
+Generated assembler
+#START _litmus_P0
+	ori t5,x0,1
+	lr.w t4,0(a5)
+	sc.w a1,t5,0(a3)
+Test SC-FAIL Required
+Histogram (1 states)
+40000000:>0:x8=1; y=0;
+Ok
+
+Witnesses
+Positive: 40000000, Negative: 0
+Condition forall (y=0 /\ 0:x8=1) is validated
+Hash=54933fff4793ed0153348a083bd56e14
+Observation SC-FAIL Always 40000000 0
+Time SC-FAIL 13.01
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoRW1+posxp.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoRW1+posxp
+"PosRWXP RfePX"
+{0:x5=x; 0:x8=1;}
+ P0               ;
+ lr.w x6,0(x5)    ;
+ sc.w x7,x6,0(x5) ;
+ sw x8,0(x5)      ;
+
+exists (not (0:x6=0 /\ x=1 /\ (0:x7=0 \/ 0:x7=1)))
+Generated assembler
+#START _litmus_P0
+	lr.w a3,0(a5)
+	sc.w a6,a3,0(a5)
+	sw a1,0(a5)
+Test CoRW1+posxp Allowed
+Histogram (1 states)
+40000000:>0:x6=0; 0:x7=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x6=0 /\ x=1 /\ (0:x7=0 \/ 0:x7=1))) is NOT validated
+Hash=9352e8c8fbdd6ddbbc8fea2df5ea907f
+Cycle=RfePX PosRWXP
+Relax CoRW1+posxp No RfePX
+Safe=PosRW
+Generator=diy7 (version 7.51+4(dev))
+Com=Rf
+Orig=PosRWXP RfePX
+Observation CoRW1+posxp Never 0 40000000
+Time CoRW1+posxp 13.10
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoRW1+fence.rw.rwsxp.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoRW1+fence.rw.rwsxp
+"Fence.rw.rwsRWXP RfePX"
+{0:x5=x; 0:x8=1;}
+ P0               ;
+ lr.w x6,0(x5)    ;
+ sc.w x7,x6,0(x5) ;
+ fence rw,rw      ;
+ sw x8,0(x5)      ;
+
+exists (not (0:x6=0 /\ x=1 /\ (0:x7=0 \/ 0:x7=1)))
+Generated assembler
+#START _litmus_P0
+	lr.w a3,0(a5)
+	sc.w a6,a3,0(a5)
+	fence rw,rw
+	sw a1,0(a5)
+Test CoRW1+fence.rw.rwsxp Allowed
+Histogram (1 states)
+40000000:>0:x6=0; 0:x7=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x6=0 /\ x=1 /\ (0:x7=0 \/ 0:x7=1))) is NOT validated
+Hash=a799a4f2b97f6470389a50405d31c537
+Cycle=RfePX Fence.rw.rwsRWXP
+Relax CoRW1+fence.rw.rwsxp No RfePX
+Safe=Fence.rw.rwsRW
+Generator=diy7 (version 7.51+4(dev))
+Com=Rf
+Orig=Fence.rw.rwsRWXP RfePX
+Observation CoRW1+fence.rw.rwsxp Never 0 40000000
+Time CoRW1+fence.rw.rwsxp 12.59
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWR0+posxp.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWR0+posxp
+"PosWRXP FrePX"
+{0:x5=x; 0:x6=1;}
+ P0               ;
+ lr.w x7,0(x5)    ;
+ sc.w x8,x6,0(x5) ;
+ lw x9,0(x5)      ;
+
+exists (not (0:x7=0 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0)))
+Generated assembler
+#START _litmus_P0
+	lr.w a3,0(a5)
+	sc.w a6,a2,0(a5)
+	lw a0,0(a5)
+Test CoWR0+posxp Allowed
+Histogram (1 states)
+40000000:>0:x7=0; 0:x8=0; 0:x9=1; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=0 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0))) is NOT validated
+Hash=8ff85649da7ca1d012154a8cff659295
+Cycle=FrePX PosWRXP
+Relax CoWR0+posxp No FrePX
+Safe=PosWR
+Generator=diy7 (version 7.51+4(dev))
+Com=Fr
+Orig=PosWRXP FrePX
+Observation CoWR0+posxp Never 0 40000000
+Time CoWR0+posxp 14.05
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWR0+fence.rw.rwsxp.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWR0+fence.rw.rwsxp
+"Fence.rw.rwsWRXP FrePX"
+{0:x5=x; 0:x6=1;}
+ P0               ;
+ lr.w x7,0(x5)    ;
+ sc.w x8,x6,0(x5) ;
+ fence rw,rw      ;
+ lw x9,0(x5)      ;
+
+exists (not (0:x7=0 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0)))
+Generated assembler
+#START _litmus_P0
+	lr.w a3,0(a5)
+	sc.w a6,a2,0(a5)
+	fence rw,rw
+	lw a0,0(a5)
+Test CoWR0+fence.rw.rwsxp Allowed
+Histogram (1 states)
+40000000:>0:x7=0; 0:x8=0; 0:x9=1; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=0 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0))) is NOT validated
+Hash=918a3845f542c4553a44b96af646e7bd
+Cycle=FrePX Fence.rw.rwsWRXP
+Relax CoWR0+fence.rw.rwsxp No FrePX
+Safe=Fence.rw.rwsWR
+Generator=diy7 (version 7.51+4(dev))
+Com=Fr
+Orig=Fence.rw.rwsWRXP FrePX
+Observation CoWR0+fence.rw.rwsxp Never 0 40000000
+Time CoWR0+fence.rw.rwsxp 16.41
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWW+posxp.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWW+posxp
+"PosWWXP WsePX"
+{0:x5=x; 0:x6=1; 0:x9=2;}
+ P0               ;
+ lr.w x7,0(x5)    ;
+ sc.w x8,x6,0(x5) ;
+ sw x9,0(x5)      ;
+
+exists (not (0:x7=0 /\ x=2 /\ (0:x8=0 \/ 0:x8=1)))
+Generated assembler
+#START _litmus_P0
+	lr.w a3,0(a5)
+	sc.w a7,a1,0(a5)
+	sw a0,0(a5)
+Test CoWW+posxp Allowed
+Histogram (1 states)
+40000000:>0:x7=0; 0:x8=0; x=2;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=0 /\ x=2 /\ (0:x8=0 \/ 0:x8=1))) is NOT validated
+Hash=00ae93bcf369ea5d3417ffa6917039d8
+Cycle=WsePX PosWWXP
+Relax CoWW+posxp No WsePX
+Safe=PosWW
+Generator=diy7 (version 7.51+4(dev))
+Com=Ws
+Orig=PosWWXP WsePX
+Observation CoWW+posxp Never 0 40000000
+Time CoWW+posxp 12.60
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWW+fence.rw.rwsxp.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWW+fence.rw.rwsxp
+"Fence.rw.rwsWWXP WsePX"
+{0:x5=x; 0:x6=1; 0:x9=2;}
+ P0               ;
+ lr.w x7,0(x5)    ;
+ sc.w x8,x6,0(x5) ;
+ fence rw,rw      ;
+ sw x9,0(x5)      ;
+
+exists (not (0:x7=0 /\ x=2 /\ (0:x8=0 \/ 0:x8=1)))
+Generated assembler
+#START _litmus_P0
+	lr.w a3,0(a5)
+	sc.w a7,a1,0(a5)
+	fence rw,rw
+	sw a0,0(a5)
+Test CoWW+fence.rw.rwsxp Allowed
+Histogram (1 states)
+40000000:>0:x7=0; 0:x8=0; x=2;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=0 /\ x=2 /\ (0:x8=0 \/ 0:x8=1))) is NOT validated
+Hash=a3015aa391160d63de597cbdab65ecd7
+Cycle=WsePX Fence.rw.rwsWWXP
+Relax CoWW+fence.rw.rwsxp No WsePX
+Safe=Fence.rw.rwsWW
+Generator=diy7 (version 7.51+4(dev))
+Com=Ws
+Orig=Fence.rw.rwsWWXP WsePX
+Observation CoWW+fence.rw.rwsxp Never 0 40000000
+Time CoWW+fence.rw.rwsxp 13.45
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWW+pospx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWW+pospx
+"PosWWPX WseXP"
+{0:x5=1; 0:x6=x; 0:x7=2;}
+ P0               ;
+ sw x5,0(x6)      ;
+ lr.w x8,0(x6)    ;
+ sc.w x9,x7,0(x6) ;
+
+exists (not (0:x8=1 /\ (0:x9=0 /\ x=2 \/ 0:x9=1 /\ x=1)))
+Generated assembler
+#START _litmus_P0
+	sw a1,0(a5)
+	lr.w a3,0(a5)
+	sc.w a7,a0,0(a5)
+Test CoWW+pospx Allowed
+Histogram (1 states)
+40000000:>0:x8=1; 0:x9=0; x=2;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x8=1 /\ (0:x9=0 /\ x=2 \/ 0:x9=1 /\ x=1))) is NOT validated
+Hash=42788a55589235ab590d556eb3eccf9d
+Cycle=PosWWPX WseXP
+Relax CoWW+pospx No PosWWPX
+Safe=Wse
+Generator=diy7 (version 7.51+4(dev))
+Com=Ws
+Orig=PosWWPX WseXP
+Observation CoWW+pospx Never 0 40000000
+Time CoWW+pospx 13.44
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWR0+pospx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWR0+pospx
+"PosWRPX FreXP"
+{0:x5=1; 0:x6=x;}
+ P0               ;
+ sw x5,0(x6)      ;
+ lr.w x7,0(x6)    ;
+ sc.w x8,x7,0(x6) ;
+
+exists (not (0:x7=1 /\ x=1 /\ (0:x8=0 \/ 0:x8=1)))
+Generated assembler
+#START _litmus_P0
+	sw a1,0(a5)
+	lr.w a3,0(a5)
+	sc.w a6,a3,0(a5)
+Test CoWR0+pospx Allowed
+Histogram (1 states)
+40000000:>0:x7=1; 0:x8=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=1 /\ x=1 /\ (0:x8=0 \/ 0:x8=1))) is NOT validated
+Hash=0b2e1b3884dbb2d73ca46ce1e83f6efa
+Cycle=PosWRPX FreXP
+Relax CoWR0+pospx No PosWRPX
+Safe=Fre
+Generator=diy7 (version 7.51+4(dev))
+Com=Fr
+Orig=PosWRPX FreXP
+Observation CoWR0+pospx Never 0 40000000
+Time CoWR0+pospx 12.58
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoRW1+pospx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoRW1+pospx
+"PosRWPX RfeXP"
+{0:x6=x; 0:x7=1;}
+ P0               ;
+ lw x5,0(x6)      ;
+ lr.w x8,0(x6)    ;
+ sc.w x9,x7,0(x6) ;
+
+exists (not (0:x5=0 /\ 0:x8=0 /\ (0:x9=0 /\ x=1 \/ 0:x9=1 /\ x=0)))
+Generated assembler
+#START _litmus_P0
+	lw a3,0(a5)
+	lr.w a6,0(a5)
+	sc.w a0,a2,0(a5)
+Test CoRW1+pospx Allowed
+Histogram (1 states)
+40000000:>0:x5=0; 0:x8=0; 0:x9=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x5=0 /\ 0:x8=0 /\ (0:x9=0 /\ x=1 \/ 0:x9=1 /\ x=0))) is NOT validated
+Hash=7d40e9f23409c73a9ca562b86e05f5a7
+Cycle=PosRWPX RfeXP
+Relax CoRW1+pospx No PosRWPX
+Safe=Rfe
+Generator=diy7 (version 7.51+4(dev))
+Com=Rf
+Orig=PosRWPX RfeXP
+Observation CoRW1+pospx Never 0 40000000
+Time CoRW1+pospx 13.35
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWW+fence.rw.rwspx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWW+fence.rw.rwspx
+"Fence.rw.rwsWWPX WseXP"
+{0:x5=1; 0:x6=x; 0:x7=2;}
+ P0               ;
+ sw x5,0(x6)      ;
+ fence rw,rw      ;
+ lr.w x8,0(x6)    ;
+ sc.w x9,x7,0(x6) ;
+
+exists (not (0:x8=1 /\ (0:x9=0 /\ x=2 \/ 0:x9=1 /\ x=1)))
+Generated assembler
+#START _litmus_P0
+	sw a1,0(a5)
+	fence rw,rw
+	lr.w a3,0(a5)
+	sc.w a7,a0,0(a5)
+Test CoWW+fence.rw.rwspx Allowed
+Histogram (1 states)
+40000000:>0:x8=1; 0:x9=0; x=2;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x8=1 /\ (0:x9=0 /\ x=2 \/ 0:x9=1 /\ x=1))) is NOT validated
+Hash=d29d3cef2bcb5294b0b0947fb6bb72c3
+Cycle=Fence.rw.rwsWWPX WseXP
+Relax CoWW+fence.rw.rwspx No Fence.rw.rwsWWPX
+Safe=Wse
+Generator=diy7 (version 7.51+4(dev))
+Com=Ws
+Orig=Fence.rw.rwsWWPX WseXP
+Observation CoWW+fence.rw.rwspx Never 0 40000000
+Time CoWW+fence.rw.rwspx 12.84
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWR0+fence.rw.rwspx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWR0+fence.rw.rwspx
+"Fence.rw.rwsWRPX FreXP"
+{0:x5=1; 0:x6=x;}
+ P0               ;
+ sw x5,0(x6)      ;
+ fence rw,rw      ;
+ lr.w x7,0(x6)    ;
+ sc.w x8,x7,0(x6) ;
+
+exists (not (0:x7=1 /\ x=1 /\ (0:x8=0 \/ 0:x8=1)))
+Generated assembler
+#START _litmus_P0
+	sw a1,0(a5)
+	fence rw,rw
+	lr.w a3,0(a5)
+	sc.w a6,a3,0(a5)
+Test CoWR0+fence.rw.rwspx Allowed
+Histogram (1 states)
+40000000:>0:x7=1; 0:x8=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=1 /\ x=1 /\ (0:x8=0 \/ 0:x8=1))) is NOT validated
+Hash=67738d11598409c4ac14cf89e1dd9851
+Cycle=Fence.rw.rwsWRPX FreXP
+Relax CoWR0+fence.rw.rwspx No Fence.rw.rwsWRPX
+Safe=Fre
+Generator=diy7 (version 7.51+4(dev))
+Com=Fr
+Orig=Fence.rw.rwsWRPX FreXP
+Observation CoWR0+fence.rw.rwspx Never 0 40000000
+Time CoWR0+fence.rw.rwspx 19.27
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoRW1+fence.rw.rwspx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoRW1+fence.rw.rwspx
+"Fence.rw.rwsRWPX RfeXP"
+{0:x6=x; 0:x7=1;}
+ P0               ;
+ lw x5,0(x6)      ;
+ fence rw,rw      ;
+ lr.w x8,0(x6)    ;
+ sc.w x9,x7,0(x6) ;
+
+exists (not (0:x5=0 /\ 0:x8=0 /\ (0:x9=0 /\ x=1 \/ 0:x9=1 /\ x=0)))
+Generated assembler
+#START _litmus_P0
+	lw a3,0(a5)
+	fence rw,rw
+	lr.w a6,0(a5)
+	sc.w a0,a2,0(a5)
+Test CoRW1+fence.rw.rwspx Allowed
+Histogram (1 states)
+40000000:>0:x5=0; 0:x8=0; 0:x9=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x5=0 /\ 0:x8=0 /\ (0:x9=0 /\ x=1 \/ 0:x9=1 /\ x=0))) is NOT validated
+Hash=d38916ddbe3fcbeb3448de8692b7ed1e
+Cycle=Fence.rw.rwsRWPX RfeXP
+Relax CoRW1+fence.rw.rwspx No Fence.rw.rwsRWPX
+Safe=Rfe
+Generator=diy7 (version 7.51+4(dev))
+Com=Rf
+Orig=Fence.rw.rwsRWPX RfeXP
+Observation CoRW1+fence.rw.rwspx Never 0 40000000
+Time CoRW1+fence.rw.rwspx 13.65
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoRW1+posxx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoRW1+posxx
+"PosRWXX RfeXX"
+{0:x5=x; 0:x8=1;}
+ P0                ;
+ lr.w x6,0(x5)     ;
+ sc.w x7,x6,0(x5)  ;
+ lr.w x9,0(x5)     ;
+ sc.w x10,x8,0(x5) ;
+
+exists (not (0:x6=0 /\ 0:x9=0 /\ (0:x10=0 /\ x=1 /\ (0:x7=0 \/ 0:x7=1) \/ 0:x10=1 /\ x=0 /\ (0:x7=1 \/ 0:x7=0))))
+Generated assembler
+#START _litmus_P0
+	lr.w a2,0(a5)
+	sc.w a6,a2,0(a5)
+	lr.w a0,0(a5)
+	sc.w a7,a3,0(a5)
+Test CoRW1+posxx Allowed
+Histogram (1 states)
+40000000:>0:x6=0; 0:x7=0; 0:x9=0; 0:x10=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x6=0 /\ 0:x9=0 /\ (0:x10=0 /\ x=1 /\ (0:x7=0 \/ 0:x7=1) \/ 0:x10=1 /\ x=0 /\ (0:x7=1 \/ 0:x7=0)))) is NOT validated
+Hash=aee22a3960ef07c9de8f13aa88329aa7
+Cycle=RfeXX PosRWXX
+Relax CoRW1+posxx No RfeXX
+Safe=PosRW
+Generator=diy7 (version 7.51+4(dev))
+Com=Rf
+Orig=PosRWXX RfeXX
+Observation CoRW1+posxx Never 0 40000000
+Time CoRW1+posxx 16.52
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoRW1+fence.rw.rwsxx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoRW1+fence.rw.rwsxx
+"Fence.rw.rwsRWXX RfeXX"
+{0:x5=x; 0:x8=1;}
+ P0                ;
+ lr.w x6,0(x5)     ;
+ sc.w x7,x6,0(x5)  ;
+ fence rw,rw       ;
+ lr.w x9,0(x5)     ;
+ sc.w x10,x8,0(x5) ;
+
+exists (not (0:x6=0 /\ 0:x9=0 /\ (0:x10=0 /\ x=1 /\ (0:x7=0 \/ 0:x7=1) \/ 0:x10=1 /\ x=0 /\ (0:x7=1 \/ 0:x7=0))))
+Generated assembler
+#START _litmus_P0
+	lr.w a2,0(a5)
+	sc.w a6,a2,0(a5)
+	fence rw,rw
+	lr.w a0,0(a5)
+	sc.w a7,a3,0(a5)
+Test CoRW1+fence.rw.rwsxx Allowed
+Histogram (1 states)
+40000000:>0:x6=0; 0:x7=0; 0:x9=0; 0:x10=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x6=0 /\ 0:x9=0 /\ (0:x10=0 /\ x=1 /\ (0:x7=0 \/ 0:x7=1) \/ 0:x10=1 /\ x=0 /\ (0:x7=1 \/ 0:x7=0)))) is NOT validated
+Hash=a67033c777f75734bae8a8fc8b6e0e28
+Cycle=RfeXX Fence.rw.rwsRWXX
+Relax CoRW1+fence.rw.rwsxx No RfeXX
+Safe=Fence.rw.rwsRW
+Generator=diy7 (version 7.51+4(dev))
+Com=Rf
+Orig=Fence.rw.rwsRWXX RfeXX
+Observation CoRW1+fence.rw.rwsxx Never 0 40000000
+Time CoRW1+fence.rw.rwsxx 15.89
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWR0+posxx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWR0+posxx
+"PosWRXX FreXX"
+{0:x5=x; 0:x6=1;}
+ P0                ;
+ lr.w x7,0(x5)     ;
+ sc.w x8,x6,0(x5)  ;
+ lr.w x9,0(x5)     ;
+ sc.w x10,x9,0(x5) ;
+
+exists (not (0:x7=0 /\ (0:x10=0 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0) \/ 0:x10=1 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0))))
+Generated assembler
+#START _litmus_P0
+	lr.w a2,0(a5)
+	sc.w a6,a3,0(a5)
+	lr.w a0,0(a5)
+	sc.w a7,a0,0(a5)
+Test CoWR0+posxx Allowed
+Histogram (1 states)
+40000000:>0:x7=0; 0:x8=0; 0:x9=1; 0:x10=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=0 /\ (0:x10=0 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0) \/ 0:x10=1 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0)))) is NOT validated
+Hash=0e39534a5a81c175003ed67e2ca7c8b0
+Cycle=FreXX PosWRXX
+Relax CoWR0+posxx No FreXX
+Safe=PosWR
+Generator=diy7 (version 7.51+4(dev))
+Com=Fr
+Orig=PosWRXX FreXX
+Observation CoWR0+posxx Never 0 40000000
+Time CoWR0+posxx 14.68
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWR0+fence.rw.rwsxx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWR0+fence.rw.rwsxx
+"Fence.rw.rwsWRXX FreXX"
+{0:x5=x; 0:x6=1;}
+ P0                ;
+ lr.w x7,0(x5)     ;
+ sc.w x8,x6,0(x5)  ;
+ fence rw,rw       ;
+ lr.w x9,0(x5)     ;
+ sc.w x10,x9,0(x5) ;
+
+exists (not (0:x7=0 /\ (0:x10=0 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0) \/ 0:x10=1 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0))))
+Generated assembler
+#START _litmus_P0
+	lr.w a2,0(a5)
+	sc.w a6,a3,0(a5)
+	fence rw,rw
+	lr.w a0,0(a5)
+	sc.w a7,a0,0(a5)
+Test CoWR0+fence.rw.rwsxx Allowed
+Histogram (1 states)
+40000000:>0:x7=0; 0:x8=0; 0:x9=1; 0:x10=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=0 /\ (0:x10=0 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0) \/ 0:x10=1 /\ (0:x8=0 /\ 0:x9=1 /\ x=1 \/ 0:x8=1 /\ 0:x9=0 /\ x=0)))) is NOT validated
+Hash=6e063a336c79b1c8bf5439cd85427138
+Cycle=FreXX Fence.rw.rwsWRXX
+Relax CoWR0+fence.rw.rwsxx No FreXX
+Safe=Fence.rw.rwsWR
+Generator=diy7 (version 7.51+4(dev))
+Com=Fr
+Orig=Fence.rw.rwsWRXX FreXX
+Observation CoWR0+fence.rw.rwsxx Never 0 40000000
+Time CoWR0+fence.rw.rwsxx 15.47
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWW+posxx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWW+posxx
+"PosWWXX WseXX"
+{0:x5=x; 0:x6=1; 0:x9=2;}
+ P0                ;
+ lr.w x7,0(x5)     ;
+ sc.w x8,x6,0(x5)  ;
+ lr.w x10,0(x5)    ;
+ sc.w x11,x9,0(x5) ;
+
+exists (not (0:x7=0 /\ (0:x10=0 /\ 0:x8=1 /\ (0:x11=0 /\ x=2 \/ 0:x11=1 /\ x=0) \/ 0:x10=1 /\ 0:x8=0 /\ (0:x11=0 /\ x=2 \/ 0:x11=1 /\ x=1))))
+Generated assembler
+#START _litmus_P0
+	lr.w a1,0(a5)
+	sc.w a7,a3,0(a5)
+	lr.w a6,0(a5)
+	sc.w s4,a2,0(a5)
+Test CoWW+posxx Allowed
+Histogram (1 states)
+40000000:>0:x7=0; 0:x8=0; 0:x10=1; 0:x11=0; x=2;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=0 /\ (0:x10=0 /\ 0:x8=1 /\ (0:x11=0 /\ x=2 \/ 0:x11=1 /\ x=0) \/ 0:x10=1 /\ 0:x8=0 /\ (0:x11=0 /\ x=2 \/ 0:x11=1 /\ x=1)))) is NOT validated
+Hash=48347f88828b463ef9966e6e1f00b6ff
+Cycle=WseXX PosWWXX
+Relax CoWW+posxx No WseXX
+Safe=PosWW
+Generator=diy7 (version 7.51+4(dev))
+Com=Ws
+Orig=PosWWXX WseXX
+Observation CoWW+posxx Never 0 40000000
+Time CoWW+posxx 15.29
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/ATOMICS/CO/CoWW+fence.rw.rwsxx.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWW+fence.rw.rwsxx
+"Fence.rw.rwsWWXX WseXX"
+{0:x5=x; 0:x6=1; 0:x9=2;}
+ P0                ;
+ lr.w x7,0(x5)     ;
+ sc.w x8,x6,0(x5)  ;
+ fence rw,rw       ;
+ lr.w x10,0(x5)    ;
+ sc.w x11,x9,0(x5) ;
+
+exists (not (0:x7=0 /\ (0:x10=0 /\ 0:x8=1 /\ (0:x11=0 /\ x=2 \/ 0:x11=1 /\ x=0) \/ 0:x10=1 /\ 0:x8=0 /\ (0:x11=0 /\ x=2 \/ 0:x11=1 /\ x=1))))
+Generated assembler
+#START _litmus_P0
+	lr.w a1,0(a5)
+	sc.w a7,a3,0(a5)
+	fence rw,rw
+	lr.w a6,0(a5)
+	sc.w s4,a2,0(a5)
+Test CoWW+fence.rw.rwsxx Allowed
+Histogram (1 states)
+40000000:>0:x7=0; 0:x8=0; 0:x10=1; 0:x11=0; x=2;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=0 /\ (0:x10=0 /\ 0:x8=1 /\ (0:x11=0 /\ x=2 \/ 0:x11=1 /\ x=0) \/ 0:x10=1 /\ 0:x8=0 /\ (0:x11=0 /\ x=2 \/ 0:x11=1 /\ x=1)))) is NOT validated
+Hash=3b88fd9bb750a0d43605feae56f35b96
+Cycle=WseXX Fence.rw.rwsWWXX
+Relax CoWW+fence.rw.rwsxx No WseXX
+Safe=Fence.rw.rwsWW
+Generator=diy7 (version 7.51+4(dev))
+Com=Ws
+Orig=Fence.rw.rwsWWXX WseXX
+Observation CoWW+fence.rw.rwsxx Never 0 40000000
+Time CoWW+fence.rw.rwsxx 15.78
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/CO/CoRW1.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoRW1
+"PosRW Rfe"
+{0:x6=x; 0:x7=1;}
+ P0          ;
+ lw x5,0(x6) ;
+ sw x7,0(x6) ;
+
+exists (not (0:x5=0 /\ x=1))
+Generated assembler
+#START _litmus_P0
+	lw a3,0(a5)
+	sw a1,0(a5)
+Test CoRW1 Allowed
+Histogram (1 states)
+40000000:>0:x5=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x5=0 /\ x=1)) is NOT validated
+Hash=c790c72b077cb92a08dc8fd28d5e8df1
+Cycle=Rfe PosRW
+Relax CoRW1 No 
+Safe=Rfe PosRW
+Generator=diy7 (version 7.51+4(dev))
+Com=Rf
+Orig=PosRW Rfe
+Observation CoRW1 Never 0 40000000
+Time CoRW1 11.70
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/CO/CoRW1+fence.rw.rws.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoRW1+fence.rw.rws
+"Fence.rw.rwsRW Rfe"
+{0:x6=x; 0:x7=1;}
+ P0          ;
+ lw x5,0(x6) ;
+ fence rw,rw ;
+ sw x7,0(x6) ;
+
+exists (not (0:x5=0 /\ x=1))
+Generated assembler
+#START _litmus_P0
+	lw a3,0(a5)
+	fence rw,rw
+	sw a1,0(a5)
+Test CoRW1+fence.rw.rws Allowed
+Histogram (1 states)
+40000000:>0:x5=0; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x5=0 /\ x=1)) is NOT validated
+Hash=f3fb407dcff0267ce87c6f3c7a7dbdcc
+Cycle=Rfe Fence.rw.rwsRW
+Relax CoRW1+fence.rw.rws No 
+Safe=Rfe Fence.rw.rwsRW
+Generator=diy7 (version 7.51+4(dev))
+Com=Rf
+Orig=Fence.rw.rwsRW Rfe
+Observation CoRW1+fence.rw.rws Never 0 40000000
+Time CoRW1+fence.rw.rws 11.31
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/CO/CoWR0.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWR0
+"PosWR Fre"
+{0:x5=1; 0:x6=x;}
+ P0          ;
+ sw x5,0(x6) ;
+ lw x7,0(x6) ;
+
+exists (not (0:x7=1 /\ x=1))
+Generated assembler
+#START _litmus_P0
+	sw a1,0(a5)
+	lw a3,0(a5)
+Test CoWR0 Allowed
+Histogram (1 states)
+40000000:>0:x7=1; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=1 /\ x=1)) is NOT validated
+Hash=f074a36bdfda1801b7733a2bfee743aa
+Cycle=Fre PosWR
+Relax CoWR0 No 
+Safe=Fre PosWR
+Generator=diy7 (version 7.51+4(dev))
+Com=Fr
+Orig=PosWR Fre
+Observation CoWR0 Never 0 40000000
+Time CoWR0 11.26
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/CO/CoWR0+fence.rw.rws.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWR0+fence.rw.rws
+"Fence.rw.rwsWR Fre"
+{0:x5=1; 0:x6=x;}
+ P0          ;
+ sw x5,0(x6) ;
+ fence rw,rw ;
+ lw x7,0(x6) ;
+
+exists (not (0:x7=1 /\ x=1))
+Generated assembler
+#START _litmus_P0
+	sw a1,0(a5)
+	fence rw,rw
+	lw a3,0(a5)
+Test CoWR0+fence.rw.rws Allowed
+Histogram (1 states)
+40000000:>0:x7=1; x=1;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (0:x7=1 /\ x=1)) is NOT validated
+Hash=fce43943f406ecf5a85632327ef40e4a
+Cycle=Fre Fence.rw.rwsWR
+Relax CoWR0+fence.rw.rws No 
+Safe=Fre Fence.rw.rwsWR
+Generator=diy7 (version 7.51+4(dev))
+Com=Fr
+Orig=Fence.rw.rwsWR Fre
+Observation CoWR0+fence.rw.rws Never 0 40000000
+Time CoWR0+fence.rw.rws 11.58
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/CO/CoWW.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWW
+"PosWW Wse"
+{0:x5=1; 0:x6=x; 0:x7=2;}
+ P0          ;
+ sw x5,0(x6) ;
+ sw x7,0(x6) ;
+
+exists (not (x=2))
+Generated assembler
+#START _litmus_P0
+	sw a1,0(a5)
+	sw t3,0(a5)
+Test CoWW Allowed
+Histogram (1 states)
+40000000:>x=2;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (x=2)) is NOT validated
+Hash=03dceb1df454c966f652cda642fec8ac
+Cycle=Wse PosWW
+Relax CoWW No 
+Safe=Wse PosWW
+Generator=diy7 (version 7.51+4(dev))
+Com=Ws
+Orig=PosWW Wse
+Observation CoWW Never 0 40000000
+Time CoWW 10.52
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Results for tests/non-mixed-size/CO/CoWW+fence.rw.rws.litmus %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RISCV CoWW+fence.rw.rws
+"Fence.rw.rwsWW Wse"
+{0:x5=1; 0:x6=x; 0:x7=2;}
+ P0          ;
+ sw x5,0(x6) ;
+ fence rw,rw ;
+ sw x7,0(x6) ;
+
+exists (not (x=2))
+Generated assembler
+#START _litmus_P0
+	sw a1,0(a5)
+	fence rw,rw
+	sw t3,0(a5)
+Test CoWW+fence.rw.rws Allowed
+Histogram (1 states)
+40000000:>x=2;
+No
+
+Witnesses
+Positive: 0, Negative: 40000000
+Condition exists (not (x=2)) is NOT validated
+Hash=262c68a4e3da68f791d9109eb322a33f
+Cycle=Wse Fence.rw.rwsWW
+Relax CoWW+fence.rw.rws No 
+Safe=Wse Fence.rw.rwsWW
+Generator=diy7 (version 7.51+4(dev))
+Com=Ws
+Orig=Fence.rw.rwsWW Wse
+Observation CoWW+fence.rw.rws Never 0 40000000
+Time CoWW+fence.rw.rws 11.30
+Revision exported, version 7.51
+Command line: litmus7 -mach ./riscv.cfg -avail 1 -excl gcc.excl -excl instructions.excl -o hw-tests-src tests/non-mixed-size/@all
+Parameters
+#define SIZE_OF_TEST 100
+#define NUMBER_OF_RUN 10
+#define AVAIL 1
+#define STRIDE 1
+#define MAX_LOOP 0
+/* gcc options: -D_GNU_SOURCE -DFORCE_AFFINITY -Wall -std=gnu99 -O2 -pthread */
+/* gcc link options: -static */
+/* barrier: userfence */
+/* launch: changing */
+/* affinity: incr1 */
+/* alloc: dynamic */
+/* memory: direct */
+/* stride: 1 */
+/* safer: write */
+/* preload: random */
+/* speedcheck: no */
+/* proc used: 1 */
+Command: ./run.exe -st 2 -s 10k -r 4k
+Wed May 18 11:14:57 2022
